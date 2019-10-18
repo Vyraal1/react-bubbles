@@ -1,13 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Login = () => {
+  const initialState = { username: "", password: "" };
+  const [credentials, setCredentials] = useState({ initialState });
   // make a post request to retrieve a token from the api
   // when you have handled the token, navigate to the BubblePage route
+  const handleSubmit = e => {
+    console.log(e);
+  };
+
+  const handleChange = e => {
+    console.log(e);
+  };
   return (
-    <>
-      <h1>Welcome to the Bubble App!</h1>
-      <p>Build a login page here</p>
-    </>
+    <form onChange={handleChange} onSubmit={handleSubmit}>
+      <input placeholder="Enter Username" name="username"></input>
+      <input
+        placeholder="Enter password"
+        name="password"
+        type="password"
+      ></input>
+      <button>Login</button>
+    </form>
   );
 };
 
