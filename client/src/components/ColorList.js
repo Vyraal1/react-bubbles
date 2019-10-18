@@ -6,7 +6,8 @@ const initialColor = {
   code: { hex: "" }
 };
 
-const ColorList = ({ colors, updateColors }) => {
+const ColorList = props => {
+  const { colors, updateColors } = props;
   const [editing, setEditing] = useState(false);
   const [colorToEdit, setColorToEdit] = useState(initialColor);
 
@@ -17,13 +18,31 @@ const ColorList = ({ colors, updateColors }) => {
 
   const saveEdit = e => {
     e.preventDefault();
-    // Make a put request to save your updated color
-    // think about where will you get the id from...
-    // where is is saved right now?
+    console.log("form inputs", colorToEdit);
+    let updatedColors = colors.map(updatedColor => {
+      //delcaring a variable that stores
+      return updatedColor.id === colorToEdit.id ? colorToEdit : updatedColor;
+    });
+    console.log(updatedColors);
+    console.log(`sending this to /api/colors/${colorToEdit.id}`, colorToEdit);
+    axiosWithAuth()
+      .put(`/api/colors/${colorToEdit.id}`, colorToEdit)
+      .then(res => {
+        updateColors(updatedColors);
+      })
+      .catch(err => console.log("what error is this", err));
   };
 
-  const deleteColor = color => {
-    // make a delete request to delete this color
+  const deleteColor = deletedColor => {
+    // declaring a variable to delete color locally, only called if request is successful
+    let updatedColors = colors.filter(color => color.id !== deletedColor.id);
+    console.log(updatedColors);
+    axiosWithAuth()
+      .delete(`/api/colors/${deletedColor.id}`)
+      .then(res => {
+        updateColors(updatedColors);
+      })
+      .catch(err => console.log(err));
   };
 
   return (
